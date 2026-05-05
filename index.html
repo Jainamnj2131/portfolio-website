@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jainam Jain — Developer</title>
+
+  <!-- Google Fonts: Inter for body, Bebas Neue for display headings -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+
+    /* ══════════════════════════════════════════════════
+       1. RESET & ROOT VARIABLES
+    ══════════════════════════════════════════════════ */
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Colors */
+      --bg:           #090e1a;
+      --bg-section:   #0c1220;
+      --bg-card:      #101828;
+      --accent:       #00d4f5;
+      --accent-glow:  rgba(0, 212, 245, 0.10);
+      --text:         #dde3ee;
+      --text-muted:   #5c6b82;
+      --text-soft:    #8a9ab5;
+      --border:       rgba(255, 255, 255, 0.07);
+      --border-hover: rgba(0, 212, 245, 0.25);
+
+      /* Typography */
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body:    'Inter', sans-serif;
+
+      /* Layout */
+      --max-w:  1100px;
+      --nav-h:  62px;
+      --px:     clamp(1.5rem, 5vw, 4rem);   /* responsive horizontal padding */
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+
+    /* ══════════════════════════════════════════════════
+       2. SCROLLBAR
+    ══════════════════════════════════════════════════ */
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+
+    /* ══════════════════════════════════════════════════
+       3. NAVBAR
+    ══════════════════════════════════════════════════ */
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--px);
+      background: rgba(9, 14, 26, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      letter-spacing: 0.07em;
+      color: var(--text);
+      line-height: 1;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    /* Desktop link list */
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.71rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hamburger — hidden on desktop */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .hamburger span {
+      display: block;
+      width: 20px; height: 1.5px;
+      background: var(--text-soft);
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .hamburger:hover span { background: var(--accent); }
+
+    /* Mobile dropdown */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      z-index: 199;
+      background: rgba(9, 14, 26, 0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem var(--px) 1.8rem;
+    }
+    .nav-mobile.open { display: block; }
+    .nav-mobile ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .nav-mobile a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-mobile a:hover { color: var(--accent); }
+
+
+    /* ══════════════════════════════════════════════════
+       4. HERO SECTION
+    ══════════════════════════════════════════════════ */
+
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: calc(var(--nav-h) + 3rem) var(--px) 5rem;
+      overflow: hidden;
+    }
+
+    /* Soft radial glow — top-right corner */
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,245,0.07) 0%, transparent 68%);
+      pointer-events: none;
+    }
+
+    /* Faint dot-grid — fades out toward bottom */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 55%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 55%);
+    }
+
+    /* Constrained content block */
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    /* "Portfolio 2025" eyebrow */
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.4rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .hero-eyebrow::before {
+      content: '';
+      flex-shrink: 0;
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    /* Primary name */
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.8rem, 11vw, 9.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: #fff;
+      margin-bottom: 0.12em;
+    }
+
+    /*
+      "DEVELOPER" ghost text.
+      Uses -webkit-text-stroke for an outlined effect.
+      Stays in normal document flow (no absolute positioning) so it
+      never overflows or clips on any screen width.
+    */
+    .hero-role {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 9vw, 7.8rem);
+      line-height: 1;
+      letter-spacing: 0.01em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.09);
+      margin-bottom: 2.2rem;
+      /* Prevents any overflow on narrow viewports */
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Role sub-label */
+    .hero-sub {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+    }
+
+    /* Short tagline */
+    .hero-tagline {
+      max-width: 440px;
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 1.85;
+      margin-bottom: 2.6rem;
+    }
+
+    /* CTA button */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.72rem 1.75rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.22s ease, color 0.22s ease, box-shadow 0.22s ease;
+      outline: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 22px rgba(0, 212, 245, 0.20);
+    }
+    .btn-primary:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* Scroll hint — bottom-left */
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.2rem;
+      left: var(--px);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .hero-scroll::before {
+      content: '';
+      flex-shrink: 0;
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, transparent, var(--text-muted));
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       5. SHARED SECTION STYLES
+    ══════════════════════════════════════════════════ */
+
+    section { padding: 6rem var(--px); }
+
+    .section-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    /* All-caps label above section heading */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .section-label::before {
+      content: '';
+      flex-shrink: 0;
+      width: 18px; height: 1px;
+      background: var(--accent);
+    }
+
+    /* Large display heading */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+      color: #fff;
+      margin-bottom: 3rem;
+    }
+
+    /* Thin horizontal rule between sections */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       6. PROJECTS SECTION
+    ══════════════════════════════════════════════════ */
+
+    #projects { background: var(--bg); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);       /* hairline gap color via bg trick */
+      border: 1px solid var(--border);
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      padding: 2rem 2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.22s ease, transform 0.22s ease;
+    }
+
+    /* Accent bar reveal on hover */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.28s ease;
+    }
+    .project-card:hover {
+      background: var(--bg-section);
+      transform: translateY(-2px);
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    /* Large faded ordinal */
+    .project-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.05);
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    .project-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.55rem;
+    }
+
+    .project-desc {
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 1.6rem;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      transition: gap 0.2s ease, opacity 0.2s ease;
+    }
+    .project-link:hover { gap: 0.6rem; opacity: 0.8; }
+
+
+    /* ══════════════════════════════════════════════════
+       7. SKILLS SECTION
+    ══════════════════════════════════════════════════ */
+
+    #skills { background: var(--bg-section); }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.42rem 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-soft);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: default;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       8. CONTACT SECTION
+    ══════════════════════════════════════════════════ */
+
+    #contact { background: var(--bg); }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+
+    .contact-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--text-soft);
+      line-height: 1.9;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .contact-item + .contact-item { margin-top: 1px; }
+    .contact-item:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-section);
+    }
+
+    .contact-item-meta { display: flex; flex-direction: column; gap: 0.15rem; }
+
+    .contact-item-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .contact-item-val {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #fff;
+    }
+    .contact-item-arrow {
+      color: var(--accent);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       9. FOOTER
+    ══════════════════════════════════════════════════ */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem var(--px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+    }
+    footer span { color: var(--accent); }
+
+
+    /* ══════════════════════════════════════════════════
+       10. SCROLL FADE-UP ANIMATION
+    ══════════════════════════════════════════════════ */
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       11. RESPONSIVE — TABLET (≤ 900px)
+    ══════════════════════════════════════════════════ */
+
+    @media (max-width: 900px) {
+      .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       12. RESPONSIVE — MOBILE (≤ 680px)
+    ══════════════════════════════════════════════════ */
+
+    @media (max-width: 680px) {
+      /* Show hamburger, hide desktop links */
+      .nav-links  { display: none; }
+      .hamburger  { display: flex; }
+
+      /* Tighter section padding */
+      section     { padding: 4.5rem var(--px); }
+      #hero       { padding-top: calc(var(--nav-h) + 2.5rem); padding-bottom: 4rem; }
+
+      /* Hide scroll hint on mobile to avoid layout conflict */
+      .hero-scroll { display: none; }
+
+      /* Single-column project grid */
+      .projects-grid { grid-template-columns: 1fr; }
+
+      /* Stack footer */
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+        padding: 1.4rem var(--px);
+      }
+    }
+
+
+    /* ══════════════════════════════════════════════════
+       13. RESPONSIVE — SMALL MOBILE (≤ 400px)
+    ══════════════════════════════════════════════════ */
+
+    @media (max-width: 400px) {
+      /* Tighten letter-spacing so giant text doesn't overflow */
+      .hero-name, .hero-role { letter-spacing: 0; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════ NAVBAR ══════════════ -->
+  <nav role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo">Jainam<span>.</span></a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="burger" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile dropdown menu -->
+  <div class="nav-mobile" id="mobileMenu" aria-hidden="true">
+    <ul>
+      <li><a href="#hero"     onclick="closeMobile()">Home</a></li>
+      <li><a href="#projects" onclick="closeMobile()">Projects</a></li>
+      <li><a href="#skills"   onclick="closeMobile()">Skills</a></li>
+      <li><a href="#contact"  onclick="closeMobile()">Contact</a></li>
+    </ul>
+  </div>
+
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section id="hero" aria-label="Introduction">
+    <div class="hero-inner">
+
+      <p class="hero-eyebrow">Portfolio 2025</p>
+
+      <h1 class="hero-name">Jainam Jain</h1>
+
+      <!--
+        "DEVELOPER" ghost/outline text.
+        Sits in normal flow — not absolutely positioned —
+        so it can never clip or overflow outside its container.
+      -->
+      <p class="hero-role" aria-hidden="true">DEVELOPER</p>
+
+      <p class="hero-sub">Computer Science Student &nbsp;·&nbsp; MERN &amp; Python Developer</p>
+
+      <p class="hero-tagline">
+        Building scalable web applications and sharpening problem-solving skills —
+        one commit at a time.
+      </p>
+
+      <a href="#projects" class="btn-primary">
+        Explore My Work <span aria-hidden="true">↓</span>
+      </a>
+
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">Scroll</div>
+  </section>
+
+
+  <!-- ══════════════ PROJECTS ══════════════ -->
+  <section id="projects" aria-labelledby="projects-heading">
+    <div class="section-inner">
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-title" id="projects-heading">Projects</h2>
+
+      <div class="projects-grid">
+
+        <article class="project-card fade-up">
+          <p class="project-num" aria-hidden="true">01</p>
+          <h3 class="project-title">Plexus App</h3>
+          <p class="project-desc">
+            A full-stack web application built with the MERN stack. Features
+            authentication, real-time data handling, and a clean responsive UI.
+          </p>
+          <a href="https://github.com/Jainamnj2131/Plexus.git" class="project-link" target="_blank" rel="noopener noreferrer">
+            GitHub &rarr;
+          </a>
+        </article>
+
+        <article class="project-card fade-up" style="transition-delay: 0.08s">
+          <p class="project-num" aria-hidden="true">02</p>
+          <h3 class="project-title">Python SQLite App</h3>
+          <p class="project-desc">
+            A lightweight Python application using SQLite for data persistence.
+            Demonstrates CRUD operations and clean relational data modeling.
+          </p>
+          <a href="https://github.com/Jainamnj2131/Portfolio_Builder_Project.git" class="project-link" target="_blank" rel="noopener noreferrer">
+            GitHub &rarr;
+          </a>
+        </article>
+
+        <article class="project-card fade-up" style="transition-delay: 0.16s">
+          <p class="project-num" aria-hidden="true">03</p>
+          <h3 class="project-title">Mintlify Landing Page</h3>
+          <p class="project-desc">
+            A pixel-accurate recreation of the Mintlify docs landing page,
+            focused on layout precision, typography, and responsive design.
+          </p>
+          <a href="https://github.com/Jainamnj2131/mintlify-landing-page.git" class="project-link" target="_blank" rel="noopener noreferrer">
+            GitHub &rarr;
+          </a>
+        </article>
+
+        <article class="project-card fade-up" style="transition-delay: 0.24s">
+          <p class="project-num" aria-hidden="true">04</p>
+          <h3 class="project-title">Web Fundamentals Blogs</h3>
+          <p class="project-desc">
+            A series of technical posts covering HTML, CSS, and JavaScript
+            fundamentals — written for beginners and self-learners.
+          </p>
+          <a href="https://github.com/Jainamnj2131/web-fundamentals-blogs.git" class="project-link" target="_blank" rel="noopener noreferrer">
+            GitHub &rarr;
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" role="separator"></div>
+
+
+  <!-- ══════════════ SKILLS ══════════════ -->
+  <section id="skills" aria-labelledby="skills-heading">
+    <div class="section-inner">
+      <p class="section-label">Tech Stack</p>
+      <h2 class="section-title" id="skills-heading">Skills</h2>
+
+      <div class="skills-grid fade-up">
+        <span class="skill-tag">HTML</span>
+        <span class="skill-tag">CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Express</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">SQLite</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">REST APIs</span>
+        <span class="skill-tag">Responsive Design</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" role="separator"></div>
+
+
+  <!-- ══════════════ CONTACT ══════════════ -->
+  <section id="contact" aria-labelledby="contact-heading">
+    <div class="section-inner">
+      <p class="section-label">Get In Touch</p>
+      <h2 class="section-title" id="contact-heading">Contact</h2>
+
+      <div class="contact-layout">
+
+        <p class="contact-desc">
+          I'm open to internship opportunities, freelance projects, and
+          collaboration. Feel free to reach out — I typically respond within
+          a day.
+        </p>
+
+        <div class="contact-links fade-up">
+
+          <a href="mailto:jainam.nj2131@gmail.com" class="contact-item">
+            <div class="contact-item-meta">
+              <span class="contact-item-label">Email</span>
+              <span class="contact-item-val">jainam@example.com</span>
+            </div>
+            <span class="contact-item-arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a href="https://github.com/Jainamnj2131" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-item-meta">
+              <span class="contact-item-label">GitHub</span>
+              <span class="contact-item-val">github.com/jainamjain</span>
+            </div>
+            <span class="contact-item-arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a href="https://www.linkedin.com/in/jainam-jain-92011b394/" target="_blank" rel="noopener noreferrer" class="contact-item">
+            <div class="contact-item-meta">
+              <span class="contact-item-label">LinkedIn</span>
+              <span class="contact-item-val">linkedin.com/in/jainamjain</span>
+            </div>
+            <span class="contact-item-arrow" aria-hidden="true">→</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer>
+    <p>© 2025 <span>Jainam Jain</span></p>
+    <p>Built with HTML &amp; CSS &nbsp;·&nbsp; <span>No frameworks. Pure craft.</span></p>
+  </footer>
+
+
+  <!-- ══════════════ JAVASCRIPT ══════════════ -->
+  <script>
+    /* ── Hamburger toggle ─────────────────────── */
+    const burger     = document.getElementById('burger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    burger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', isOpen);
+      mobileMenu.setAttribute('aria-hidden', !isOpen);
+    });
+
+    function closeMobile() {
+      mobileMenu.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    }
+
+    /* ── Scroll-triggered fade-up ─────────────── */
+    const fadeEls = document.querySelectorAll('.fade-up');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);   /* fire only once */
+        }
+      });
+    }, { threshold: 0.10 });
+
+    fadeEls.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
